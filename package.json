@@ -1,0 +1,12 @@
+{
+  "name": "jump",
+  "version": "1.0.0",
+  "description": "1.画布\r 场景 背景 1-5\r 一个小人\r 一群云",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
