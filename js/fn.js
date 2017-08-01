@@ -37,6 +37,7 @@ function radishAnimateFn(obj,imgw,imgh,imgl,imgt){
              if(x==10) x=0;
              if(y==3) y=0;
              if(isOk){
+                 //是否过关
                  if(obj.l+l>ch/2){
                      //换背景
                      checkpoint++;
@@ -44,6 +45,7 @@ function radishAnimateFn(obj,imgw,imgh,imgl,imgt){
                  }
              }
              can.drawImage(obj, x* imgw,  y*imgh , imgw, imgh, imgl,imgt-l, imgw, imgh);
+             cloudAnimateFn(cloudArr,cw);
          }
      ,time);
 }
@@ -61,13 +63,15 @@ function bgChange(n){
 
 
 /**************************************************************************/
-function cloudAnimateFn(obj,imgl,imgt,imgw,imgh,cw,ch){
+function cloudAnimateFn(arr){
     return  cloudAnimate = window.setInterval(
         function () {
-            cx++;
-            if(cx+imgw>=cw) cx--;
-            if(cx+imgw>=cw) cx--;
-            can.drawImage(obj,cx*imgl,cy*imgt);
+            arr.forEach(function(item,index){
+                cx++;
+                if(cx+item.w>=cw) cx--;
+                cy++;
+                can.drawImage(item,cx*item.l,cy*item.t);
+            });
         }
         , time);
 }
