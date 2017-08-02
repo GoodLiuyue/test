@@ -10,11 +10,15 @@ let cloudDown_timer = null;
 let time = 1000;
 let x = 0;
 let y = 0;
-let cx = 1;
-let cy = 1;
 let l = 0;
+let n = 0;
+let m = 0;
+let s_= Math.random()*4-2;
+let s=2;
 let checkpoint = 0;
 let isOk = false;
+let cl_Tool_len=3;
+let k=parseInt(Math.random()*cl_Tool_len);
 /**********************************小人的运行****************************************/
 function radishAnimateFn(obj, imgw, imgh, imgl, imgt) {
     return radishAnimate = window.setInterval(
@@ -27,7 +31,7 @@ function radishAnimateFn(obj, imgw, imgh, imgl, imgt) {
         }
         , time);
 }
-function radishUp_timerFn(obj, imgw, imgh, imgl, imgt, cw, ch) {
+function radishUp_timerFn(obj, imgw, imgh, imgl, imgt, cw, ch,tool) {
     radishUp_timer = window.setInterval(
         function () {
             x++;
@@ -44,11 +48,11 @@ function radishUp_timerFn(obj, imgw, imgh, imgl, imgt, cw, ch) {
                     bgChange(checkpoint);
                 }
             }
-            can.clearRect(imgl,imgt-l,imgw,imgh+l);
+            can.clearRect(imgl, imgt - l, imgw, imgh + l);
             can.drawImage(obj, x * imgw, y * imgh, imgw, imgh, imgl, imgt - l, imgw, imgh);
-            cloudAnimateFn(cloudArr, cw);
+            bump(obj,group_b);
         }
-        , time);
+        , time/2);
 }
 
 
@@ -60,99 +64,96 @@ function bgChange(n) {
 //工具 和 碰撞；
 
 
-/**************************************************************************/
-function cloudAnimateFn(arr) {
-    return arr.forEach(function (item, index) {
-        let _this=item;
-        cloudAnimate = window.setInterval(
-            function () {
-                cx++;
-                if (cx + _this.w >= cw) {
-                    cx--;
-                    cy = cy;
-                    window.clearInterval(cloudAnimate);
+/********************************云的运动******************************************/
+function cloudAnimateFn(arr, cw) {
+    return cloudAnimate = window.setInterval(
+        function () {
+            can3.clearRect(0,0,cw3,ch3);
+            arr.forEach(function (item,index) {
+                let _this = item;
+                if (_this.l + _this.w >= cw && _this.l - _this.w< 0)
+                {
+                    n++;
+                    return ;
                 }
-                if (radish.t > _this.t) {
-                    cy++;
-                    cx = cx;
+                if (radish.t < _this.t) {
+                    m=m+10;
+                    return ;
                 }
-                if(_this.t+cy*10>ch){
-                    window.clearInterval(cloudAnimate);
+                if (_this.t + _this.h> ch && _this.t-_this.h< 0){
+                    m=m+10;
+                    return ;
                 }
-                can.clearRect(_this.l,_this.t,_this.w, _this.h);
-                console.log(_this.w,_this.h,_this.l,_this.t);
-                can.drawImage(_this, _this.l + cx * 10, _this.t + cy * 10);
-
-            }, time);
-    });
+                can3.drawImage(_this, _this.l +s_+ s* (n++), _this.t + s* m, _this.w, _this.h);
+                toolAttr(cloudArr);
+            });
+            haveTool(cloudArr);
+        }, time
+    )
 }
+/*******************************云朵绑定工具属性******************************************/
+function toolAttr(cloudArr){
+    for(let j=0;j<cl_Tool_len;j++){
+        let attr=cloudArr[parseInt(Math.random()*cl_len)];
+        attr.setAttribute('data-tool','0');
+        attr.setAttribute('name',l);
+        if(attr.getAttribute('data-tool')=='0'){
+            tool(attr.l,attr.t);
+        }
+    }
+}
+/*******************************绑定工具******************************************/
+function tool(cl_l,cl_t){
+        let toolImg = new Image;
+        toolImg.src = cloud_fn[k].src;
+        toolImg.onload= function () {
+             let _this=this;
+            _this.w=this.width;
+            _this.h=this.height;
+            _this.l=cloudArr[0].w/2+cl_l-_this.w/2;
+            _this.t=_this.h+cl_t;
+            _this.name=k;
+            can4.clearRect(0,0,cw3,ch3);
+            can4.drawImage(_this,_this.l,_this.t,_this.w,_this.h);
+        };
+}
+/*******************************判断工具******************************************/
+function haveTool(arr){
+    arr.forEach(function (item, index) {
+
+    })
+}
+/*******************************判断工具和小人 的相撞******************************************/
+function bump(radish,arr){
+    /*
+         0<Math.abs(radish.l-img.l)<img&&0<Math.abs(radish.l-img.l-img.w)<img;
+        radish.l-img.l<0
+        radish.l<img.l+img.w
+        arr;
+        img , tool
+
+        l_x
+        l t;
 
 
-/*
- let n = 0;
- let img = new Image;
- img.src = bg[0].src;
- img.onload = function () {
- timer1 = window.setTimeout(bgImg, 3000);
- };
-
- function bgImg() {
- n++;
- if(n==bg.length){
- window.clearTimeout(timer1);
- n=0
- }
- img.src = bg[n].src;
- can2.drawImage(img, 0, 0, cw2, ch2);
- }
-
- /* if (m == 10) {
- m = 0; //x方向
- }
- if (i == 3) {
- i = 1;//y方向
- }
- if (ly - y * 20 < rh) {
- //换背景；
- window.clearInterval(radishUp_timer);
- }*/
+     */
+    arr.forEach(function (item,index) {
+        if(0<Math.abs(radish.l-item.l)<item.w&&0<Math.abs(radish.l-item.l-item.w)<item.w){
+            if(tool.name==10){
+                radish.src = cloud_change[0].src;
+            }
+            if(tool.name==1){
+                radish.src = cloud_change[1].src;
+            }
+            if(tool.name==1){
+                radish.src = cloud_change[2].src;
+            }
+            isOk=true;
+        }  else{
+            isOk=false;
+            can.drawImage(radish, x * radish, y * radish, radish.w, radish.h,(cw-radish.w)/2,ch,  radish.w,  radish.h);
+        }
+    });
 
 
-/*
- timer = window.setInterval(
- function () {
- y++;//上移
- i++;
- m++;
- if (m == 10) {
- m = 0; //x方向
- }
- if (i == 3) {
- i = 1;//y方向
- }
- if (ly - y * 20 < rh) {
- //换背景；
- window.clearInterval(timer);
- }
- can.drawImage(_this, m * rw, rh * i, rw, rh, _this.l,_this.t, rw, rh);
- console.log(_this.l, _this.t,cloudArr[0].l,cloudArr[0].t);
- }, 1000);
-
- timer2 = window.setTimeout(
- function () {
- if(index==cl_len){
- window.clearTimeout(timer2);
- }
- if (clw < parseInt(Math.random() * max_w) - cls * t < max_w + clw && clh < parseInt(Math.random() * max_h) - cls * t < max_h + clh) {
- t++;
- }
- else {
- t = -t;
- }
- can.clearRect(0,0,cw,ch);
- item.src = cloud_images[1].src;
-
- }, 200);
-
- *!/
- */
+}
